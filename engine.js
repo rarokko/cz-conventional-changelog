@@ -136,7 +136,7 @@ module.exports = function(options) {
             'Please input your JIRA issue number (Ex: BL-3)\n',
           default: options.defaultJiraIssue,
           validate: function(input) {
-            if (!/((?<!([A-Z]{1,10})-?)[A-Z]+-\d+)/.test(input)) {
+            if (input && !/((?<!([A-Z]{1,10})-?)[A-Z]+-\d+)/.test(input)) {
               return 'Wrong format';
             } else {
               return true;

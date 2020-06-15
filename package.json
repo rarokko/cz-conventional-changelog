@@ -1,6 +1,6 @@
 {
   "name": "@beatlog/cz-conventional-changelog-jira",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Commitizen adapter following the conventional-changelog format.",
   "main": "index.js",
   "scripts": {
