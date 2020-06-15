@@ -12,6 +12,7 @@ var options = {
   defaultSubject: process.env.CZ_SUBJECT || config.defaultSubject,
   defaultBody: process.env.CZ_BODY || config.defaultBody,
   defaultIssues: process.env.CZ_ISSUES || config.defaultIssues,
+  defaultJira: process.env.CZ_ISSUES || config.defaultJira,
   disableScopeLowerCase:
     process.env.DISABLE_SCOPE_LOWERCASE || config.disableScopeLowerCase,
   maxHeaderWidth:
