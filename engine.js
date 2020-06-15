@@ -130,62 +130,18 @@ module.exports = function(options) {
           default: options.defaultBody
         },
         {
-          type: 'confirm',
-          name: 'isBreaking',
-          message: 'Are there any breaking changes?',
-          default: false
-        },
-        {
           type: 'input',
-          name: 'breakingBody',
-          default: '-',
+          name: 'jiraIssue',
           message:
-            'A BREAKING CHANGE commit requires a body. Please enter a longer description of the commit itself:\n',
-          when: function(answers) {
-            return answers.isBreaking && !answers.body;
-          },
-          validate: function(breakingBody, answers) {
-            return (
-              breakingBody.trim().length > 0 ||
-              'Body is required for BREAKING CHANGE'
-            );
+            'Please input your JIRA issue number (Ex: BL-3)\n',
+          default: options.defaultJiraIssue,
+          validate: function(input) {
+            if (!/((?<!([A-Z]{1,10})-?)[A-Z]+-\d+)/.test(input)) {
+              return 'Wrong format';
+            } else {
+              return true;
+            }
           }
-        },
-        {
-          type: 'input',
-          name: 'breaking',
-          message: 'Describe the breaking changes:\n',
-          when: function(answers) {
-            return answers.isBreaking;
-          }
-        },
-
-        {
-          type: 'confirm',
-          name: 'isIssueAffected',
-          message: 'Does this change affect any open issues?',
-          default: options.defaultIssues ? true : false
-        },
-        {
-          type: 'input',
-          name: 'issuesBody',
-          default: '-',
-          message:
-            'If issues are closed, the commit requires a body. Please enter a longer description of the commit itself:\n',
-          when: function(answers) {
-            return (
-              answers.isIssueAffected && !answers.body && !answers.breakingBody
-            );
-          }
-        },
-        {
-          type: 'input',
-          name: 'issues',
-          message: 'Add issue references (e.g. "fix #123", "re #123".):\n',
-          when: function(answers) {
-            return answers.isIssueAffected;
-          },
-          default: options.defaultIssues ? options.defaultIssues : undefined
         }
       ]).then(function(answers) {
         var wrapOptions = {
@@ -196,11 +152,13 @@ module.exports = function(options) {
           width: options.maxLineWidth
         };
 
+        var jiraIssue = answers.jiraIssue ? "[" + answers.jiraIssue + "] " : ""; 
+
         // parentheses are only needed when a scope is present
         var scope = answers.scope ? '(' + answers.scope + ')' : '';
 
         // Hard limit this line in the validate
-        var head = answers.type + scope + ': ' + answers.subject;
+        var head = jiraIssue + answers.type + scope + ': ' + answers.subject;
 
         // Wrap these lines at options.maxLineWidth characters
         var body = answers.body ? wrap(answers.body, wrapOptions) : false;
