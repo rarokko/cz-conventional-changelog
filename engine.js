@@ -89,6 +89,20 @@ module.exports = function(options) {
         },
         {
           type: 'input',
+          name: 'jiraIssue',
+          message:
+            'Please input your JIRA issue number (i.e. 0 for issue BL-0)\n',
+          default: options.defaultJiraIssue,
+          validate: function(input) {
+            if (input && !/^[0-9]+$/.test(input)) {
+              return 'Wrong format';
+            } else {
+              return true;
+            }
+          }
+        },
+        {
+          type: 'input',
           name: 'subject',
           message: function(answers) {
             return (
@@ -128,20 +142,6 @@ module.exports = function(options) {
           message:
             'Provide a longer description of the change: (press enter to skip)\n',
           default: options.defaultBody
-        },
-        {
-          type: 'input',
-          name: 'jiraIssue',
-          message:
-            'Please input your JIRA issue number (Ex: BL-3)\n',
-          default: options.defaultJiraIssue,
-          validate: function(input) {
-            if (input && !/((?<!([A-Z]{1,10})-?)[A-Z]+-\d+)/.test(input)) {
-              return 'Wrong format';
-            } else {
-              return true;
-            }
-          }
         }
       ]).then(function(answers) {
         var wrapOptions = {
@@ -152,13 +152,13 @@ module.exports = function(options) {
           width: options.maxLineWidth
         };
 
-        var jiraIssue = answers.jiraIssue ? "[" + answers.jiraIssue + "] " : ""; 
+        var jiraIssue = answers.jiraIssue ? "[BL-" + answers.jiraIssue + "] " : ""; 
 
         // parentheses are only needed when a scope is present
         var scope = answers.scope ? '(' + answers.scope + ')' : '';
 
         // Hard limit this line in the validate
-        var head = jiraIssue + answers.type + scope + ': ' + answers.subject;
+        var head = answers.type + scope + ': ' + jiraIssue + answers.subject;
 
         // Wrap these lines at options.maxLineWidth characters
         var body = answers.body ? wrap(answers.body, wrapOptions) : false;
