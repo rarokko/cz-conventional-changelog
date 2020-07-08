@@ -91,10 +91,10 @@ module.exports = function(options) {
           type: 'input',
           name: 'jiraIssue',
           message:
-            'Please input your JIRA issue number (e.g. BL-0)\n',
+            'Please input your JIRA issue number (i.e. 0 for issue BL-0)\n',
           default: options.defaultJiraIssue,
           validate: function(input) {
-            if (input && !/((?<!([A-Z]{1,10})-?)[A-Z]+-\d+)/.test(input)) {
+            if (input && !/^[0-9]+$/.test(input)) {
               return 'Wrong format';
             } else {
               return true;
@@ -152,7 +152,7 @@ module.exports = function(options) {
           width: options.maxLineWidth
         };
 
-        var jiraIssue = answers.jiraIssue ? "[" + answers.jiraIssue + "] " : ""; 
+        var jiraIssue = answers.jiraIssue ? "[BL-" + answers.jiraIssue + "] " : ""; 
 
         // parentheses are only needed when a scope is present
         var scope = answers.scope ? '(' + answers.scope + ')' : '';
